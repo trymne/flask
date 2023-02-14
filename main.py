@@ -11,7 +11,7 @@ def index():
 
 @app.route('/havard')
 def havard():
-    return jsonify({"Whats up": "Nå må du jobbe på Håvard!"})
+    return jsonify({"Whats up": "Time to work boii"})
 
 
 if __name__ == '__main__':
