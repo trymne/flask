@@ -1,18 +1,34 @@
 from flask import Flask, jsonify
-import os
 
 app = Flask(__name__)
 
+movies = [
+    {"id": 1, "name": "The Shawshank Redemption", "genre": "Drama"},
+    {"id": 2, "name": "The Godfather", "genre": "Drama"},
+    {"id": 3, "name": "The Dark Knight", "genre": "Action"},
+    {"id": 4, "name": "12 Angry Men", "genre": "Drama"},
+    {"id": 5, "name": "Schindler's List", "genre": "Drama"},
+    {"id": 6, "name": "The Lord of the Rings: The Return of the King", "genre": "Fantasy"},
+    {"id": 7, "name": "Pulp Fiction", "genre": "Crime"},
+    {"id": 8, "name": "Forrest Gump", "genre": "Drama"},
+    {"id": 9, "name": "The Matrix", "genre": "Action"},
+    {"id": 10, "name": "The Silence of the Lambs", "genre": "Thriller"}
+]
 
-@app.route('/')
-def index():
-    return jsonify({"Choo Choo": "Welcome to your Flask app :)"})
+
+@app.route('/movies')
+def get_movies():
+    return jsonify(movies)
 
 
-@app.route('/havard')
-def havard():
-    return jsonify({"Whats up": "Time to work boii"})
+@app.route('/movies/<int:movie_id>')
+def get_movie(movie_id):
+    movie = next((movie for movie in movies if movie['id'] == movie_id), None)
+    if movie:
+        return jsonify(movie)
+    else:
+        return jsonify({'error': 'Movie not found'}), 404
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=os.getenv("PORT", default=5000))
+    app.run(debug=True)
