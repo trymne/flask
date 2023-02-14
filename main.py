@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -16,9 +16,15 @@ movies = [
 ]
 
 
-@app.route('/movies')
-def get_movies():
-    return jsonify(movies)
+@app.route('/movies', methods=['GET', 'POST'])
+def movies_handler():
+    if request.method == 'POST':
+        new_movie = request.json
+        new_movie['id'] = max(movie['id'] for movie in movies) + 1
+        movies.append(new_movie)
+        return jsonify(new_movie), 201
+    else:
+        return jsonify(movies)
 
 
 @app.route('/movies/<int:movie_id>')
