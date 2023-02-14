@@ -27,13 +27,18 @@ def movies_handler():
         return jsonify(movies)
 
 
-@app.route('/movies/<int:movie_id>')
-def get_movie(movie_id):
+@app.route('/movies/<int:movie_id>', methods=['GET', 'PUT'])
+def movie_handler(movie_id):
     movie = next((movie for movie in movies if movie['id'] == movie_id), None)
-    if movie:
+    if not movie:
+        return jsonify({'error': 'Movie not found'}), 404
+
+    if request.method == 'PUT':
+        data = request.json
+        movie.update(data)
         return jsonify(movie)
     else:
-        return jsonify({'error': 'Movie not found'}), 404
+        return jsonify(movie)
 
 
 if __name__ == '__main__':
